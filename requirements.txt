@@ -1,0 +1,4 @@
+﻿playwright==1.55.0
+PyYAML==6.0.2
+openai
+python-dotenv

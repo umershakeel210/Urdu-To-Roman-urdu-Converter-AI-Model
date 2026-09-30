@@ -1,0 +1,106 @@
+﻿application:
+  # Replace with your actual application URL.
+  url: "http://127.0.0.1:5500/meeting-details.html?id=62"
+
+  labels:
+    source: "Raw Whisper ASR"
+    target: "Human-Approved Roman Urdu + English"
+    verify_next: "Verify & Next"
+
+  # Put exact selectors here once known. The script also has label-based fallback detection.
+  selectors:
+    source:
+      - "#reviewRawText"
+    target:
+      - "textarea[data-testid='human-approved-roman-urdu']"
+      - "textarea[name='corrected_text']"
+    verify_next:
+      - "button[data-testid='verify-next']"
+
+  next_record_timeout_ms: 60000
+
+chatgpt:
+  url: "https://chatgpt.com/"
+
+  prompt: |
+    Convert the following Urdu text into natural Roman Urdu.
+    Do not translate into English.
+    Preserve the original meaning exactly.
+    Use proper Roman Urdu spelling.
+    Return only the final Roman Urdu text.
+
+    Text:
+    {copied_text}
+
+  # Start a fresh chat periodically so a very long conversation does not accumulate.
+  new_chat_every: 20
+  response_timeout_ms: 120000
+
+  selectors:
+    composer:
+      - "#prompt-textarea"
+      - "div[contenteditable='true'][data-testid='prompt-textarea']"
+      - "div[contenteditable='true']"
+
+    send_button:
+      - "button[data-testid='send-button']"
+      - "button[aria-label='Send prompt']"
+
+    stop_button:
+      - "button[data-testid='stop-button']"
+      - "button[aria-label*='Stop']"
+
+    new_chat:
+      - "a[data-testid='create-new-chat-button']"
+      - "a[href='/']"
+      - "button[aria-label*='New chat']"
+
+    # Current ChatGPT UI commonly marks assistant turns like this.
+    # If the website changes, update this selector.
+    assistant_message: "article[data-testid^='conversation-turn-']:has([data-message-author-role='assistant'])"
+
+browser:
+  channel: "chrome"
+  headless: false
+  start_maximized: true
+  width: 1440
+  height: 900
+
+automation:
+  retries: 3
+  retry_delay_seconds: 3
+  between_records_delay_seconds: 0.5
+
+  # true = paste result and immediately click Verify & Next
+  # false = only paste result, leaving verification to a human
+  auto_verify_next: true
+
+  # If a record fails all attempts, try to move to the next one.
+  skip_failed_records: false
+
+  # 0 means no limit.
+  max_records: 0
+
+
+gemini:
+  model: "gemini-3.5-flash-lite"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
